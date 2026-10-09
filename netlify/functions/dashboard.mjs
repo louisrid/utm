@@ -2,7 +2,7 @@ import {callAppsScript, isAuthorised, json} from '../lib/shared.mjs';
 
 export async function handler(event) {
   const key = event.headers?.['x-dashboard-key'] || event.headers?.['X-Dashboard-Key'];
-  if (!isAuthorised(key, process.env.DASHBOARD_KEY)) return json(401, {ok:false, error:'Incorrect dashboard password'});
+  if (!isAuthorised(key, '123')) return json(401, {ok:false, error:'Incorrect dashboard password'});
   try {
     const data = await callAppsScript('dashboard');
     return json(200, data);
