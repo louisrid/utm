@@ -2,63 +2,63 @@
 <html lang="en-GB">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow">
-  <meta name="theme-color" content="#000000">
-  <meta name="description" content="Automatic X Tracker. Track paid publisher placements from Google Sheets.">
+  <meta name="theme-color" content="#090b0f">
+  <meta name="description" content="Automatic X Tracker, paid X placement and campaign reporting.">
   <title>AUTOMATIC X TRACKER</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <script src="/app.js" defer></script>
 </head>
-<body data-theme="mono">
-  <div class="shell">
-    <div class="top-clearance" aria-hidden="true"></div>
-    <header class="topbar">
-      <div class="brand">AUTOMATIC X <span>TRACKER</span></div>
-      <div class="header-controls">
-        <div class="theme-toggle" role="group" aria-label="Colour theme">
-          <button type="button" class="theme-button selected" data-theme-choice="mono" aria-pressed="true">B&amp;W</button>
-          <button type="button" class="theme-button" data-theme-choice="blue" aria-pressed="false">BLUE</button>
-          <button type="button" class="theme-button" data-theme-choice="red" aria-pressed="false">RED</button>
-        </div>
-        <span class="connection-status"><span class="status-dot" id="headerDot" aria-hidden="true"></span><span id="headerStatus">LOG IN</span></span>
+<body>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <div class="brand" aria-label="Automatic X Tracker">
+        <div class="brand-icon" aria-hidden="true"><span>X</span></div>
+        <div class="brand-wordmark">AUTOMATIC <strong>X</strong> TRACKER</div>
       </div>
-    </header>
+      <div class="header-status">
+        <span class="status-dot" id="headerDot" aria-hidden="true"></span>
+        <span id="headerStatus">PRIVATE</span>
+      </div>
+    </div>
+  </header>
 
-    <section class="login-panel" id="loginPanel" aria-labelledby="loginTitle">
-      <div class="login-accent" aria-hidden="true"></div>
-      <h1 id="loginTitle">SIGN IN</h1>
-      <p>Access your campaign tracker.</p>
-      <form id="loginForm">
-        <label for="password">PASSWORD</label>
-        <div class="login-row">
-          <input id="password" type="password" required autocomplete="current-password" placeholder="Enter password">
-          <button class="btn primary" type="submit">LOG IN <span aria-hidden="true">→</span></button>
-        </div>
-        <div id="loginError" class="error" role="alert"></div>
-      </form>
+  <div class="shell">
+    <section class="auth-area" id="loginPanel" aria-labelledby="loginTitle">
+      <div class="login-panel">
+        <div class="auth-indicator"><span class="auth-indicator-line"></span> PRIVATE DASHBOARD</div>
+        <h1 id="loginTitle">Sign in</h1>
+        <p class="login-subtitle">Your X campaign performance, in one place.</p>
+        <form id="loginForm">
+          <label for="password">PASSWORD</label>
+          <input id="password" type="password" required placeholder="Enter password" autocomplete="current-password">
+          <button class="btn primary login-submit" type="submit">OPEN DASHBOARD <span aria-hidden="true">↗</span></button>
+          <div class="error" id="loginError" role="alert" aria-live="polite"></div>
+        </form>
+      </div>
     </section>
 
     <main id="dashboard" hidden>
       <section class="page-heading">
         <div>
-          <div class="overline">CAMPAIGN PERFORMANCE</div>
-          <h1 id="pageTitle">DASHBOARD</h1>
+          <div class="eyebrow"><span class="eyebrow-signal" aria-hidden="true"></span> X CAMPAIGN REPORTING</div>
+          <h1 id="pageTitle">Overview</h1>
         </div>
         <div class="page-actions">
-          <a id="sourceLink" class="btn outlined" target="_blank" rel="noopener noreferrer">OPEN SHEET ↗</a>
-          <button id="refreshButton" class="btn primary" type="button">REFRESH ↻</button>
+          <a id="sourceLink" class="btn outlined" target="_blank" rel="noopener noreferrer">OPEN SHEET <span aria-hidden="true">↗</span></a>
+          <button id="refreshButton" class="btn primary" type="button">REFRESH <span aria-hidden="true">↻</span></button>
         </div>
       </section>
 
-      <nav class="control-bar" aria-label="Dashboard controls">
+      <nav class="control-bar" aria-label="Tracker navigation">
         <div class="switch-group" role="tablist" aria-label="View">
-          <button class="switch-button selected" id="viewDashboard" type="button" role="tab" aria-selected="true" aria-controls="overviewView">DASHBOARD</button>
+          <button class="switch-button selected" id="viewDashboard" type="button" role="tab" aria-selected="true" aria-controls="overviewView">OVERVIEW</button>
           <button class="switch-button" id="viewPlacements" type="button" role="tab" aria-selected="false" aria-controls="placementsView">PLACEMENTS</button>
         </div>
-        <div class="control-divider" aria-hidden="true"></div>
         <div class="owner-switch" role="group" aria-label="Account owner">
           <button type="button" class="owner-button selected" data-owner="ALL" aria-pressed="true">ALL</button>
           <button type="button" class="owner-button" data-owner="LOUIS" aria-pressed="false">LOUIS</button>
@@ -67,30 +67,51 @@
       </nav>
 
       <section id="overviewView" role="tabpanel" aria-labelledby="viewDashboard">
-        <section class="stats" aria-label="Campaign metrics">
-          <article class="stat-card"><div class="stat-label">TRACKED CLICKS</div><div id="statClicks" class="stat-value">—</div></article>
-          <article class="stat-card"><div class="stat-label">PUBLISHED POSTS</div><div id="statPosted" class="stat-value">—</div></article>
-          <article class="stat-card"><div class="stat-label">PAID SPEND</div><div id="statSpend" class="stat-value">—</div></article>
-          <article class="stat-card"><div class="stat-label">COST PER CLICK</div><div id="statCpc" class="stat-value">—</div></article>
-        </section>
+        <div class="stats" aria-label="Campaign metrics">
+          <article class="stat-card stat-blue">
+            <div class="stat-label">TRACKED CLICKS</div>
+            <div id="statClicks" class="stat-value">—</div>
+          </article>
+          <article class="stat-card stat-red">
+            <div class="stat-label">PUBLISHED</div>
+            <div id="statPosted" class="stat-value">—</div>
+          </article>
+          <article class="stat-card stat-blue">
+            <div class="stat-label">PAID SPEND</div>
+            <div id="statSpend" class="stat-value">—</div>
+          </article>
+          <article class="stat-card stat-red">
+            <div class="stat-label">COST / CLICK</div>
+            <div id="statCpc" class="stat-value">—</div>
+          </article>
+        </div>
 
-        <section class="leaderboard-card">
-          <div class="section-heading"><h2>TOP PUBLISHERS</h2><span id="overviewCount" class="section-meta">—</span></div>
-          <div id="topPublishers" class="publisher-bars"><p class="empty">Waiting for Google Sheets data.</p></div>
+        <section class="panel leaderboard-card">
+          <div class="section-heading">
+            <h2>Top publishers</h2>
+            <span id="overviewCount" class="section-meta">—</span>
+          </div>
+          <div id="topPublishers" class="publisher-bars"><p class="empty">No clicks recorded yet.</p></div>
         </section>
       </section>
 
       <section id="placementsView" role="tabpanel" aria-labelledby="viewPlacements" hidden>
-        <section class="table-card">
-          <div class="section-heading table-heading"><h2>PLACEMENTS</h2><span id="resultCount" class="section-meta">—</span></div>
+        <section class="panel table-card">
+          <div class="section-heading table-heading">
+            <h2>Publisher placements</h2>
+            <span id="resultCount" class="section-meta">—</span>
+          </div>
           <div class="filters">
-            <input type="search" id="searchInput" aria-label="Search publishers" placeholder="Search publishers or IDs…">
+            <input type="search" id="searchInput" placeholder="Search publishers or IDs" aria-label="Search publishers">
             <select id="articleFilter" aria-label="Filter by article"><option value="ALL">ALL ARTICLES</option></select>
           </div>
-          <div class="table-scroll"><table>
-            <thead><tr><th>ID</th><th>PUBLISHER</th><th>OWNER</th><th>STATUS</th><th>COST</th><th>CLICKS</th><th>UTM LINK</th><th>POST</th></tr></thead>
-            <tbody id="publisherTable"><tr><td colspan="8" class="empty">Waiting for Google Sheets data.</td></tr></tbody>
-          </table></div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>ID</th><th>PUBLISHER</th><th>OWNER</th><th>STATUS</th><th>COST</th><th>CLICKS</th><th>TRACK LINK</th><th>POST</th></tr></thead>
+              <tbody id="publisherTable"><tr><td colspan="8" class="empty">Waiting for Google Sheets data.</td></tr></tbody>
+            </table>
+          </div>
+          <div id="mobilePlacements" class="mobile-placements" aria-live="polite"></div>
         </section>
       </section>
 
