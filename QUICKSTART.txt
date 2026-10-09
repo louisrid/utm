@@ -1,0 +1,33 @@
+FANVUE UTM TRACKER - QUICKSTART
+===============================
+Your original Google Sheet is the only place to add/edit placements.
+Current scope: FANVUE X ARTICLE TRACKER, including Louis + Connor tabs.
+
+1. Unzip the project on your Mac.
+2. In Terminal, cd into the fanvue-utm-tracker folder.
+3. Run:
+   npx netlify-cli login
+   npx netlify-cli deploy --prod
+4. Copy the new https://YOUR-SITE.netlify.app URL.
+5. Open https://script.google.com/home/projects/create
+6. Paste the whole apps-script/Code.gs file.
+7. Change SITE_URL near the top to your real Netlify URL.
+8. Save and run the setup function; approve Google permissions.
+9. Copy the APP_SCRIPT_TOKEN from the Execution log.
+10. Deploy Apps Script > New deployment > Web app > Execute as Me > Access Anyone.
+11. In Netlify site settings, add:
+    APP_SCRIPT_URL=<Google Web app /exec URL>
+    APP_SCRIPT_TOKEN=<log token>
+    DASHBOARD_KEY=<your chosen dashboard password>
+12. Deploy Netlify again: npx netlify-cli deploy --prod
+13. Open the dashboard; log in with DASHBOARD_KEY.
+14. Open your existing Sheet: columns O:P now contain permanent IDs and UTM links.
+15. Check click logging by opening a link; run refreshReports once to see first totals.
+
+New publisher rows are detected automatically via the installable edit trigger.
+Every 12 hours click totals and dashboard summary refresh automatically.
+
+NOTE: A ZIP drag-and-drop to Netlify as a static site will not deploy
+serverless Functions. Use the CLI commands above or a Git-backed Netlify project.
+
+Full details, troubleshooting and caveats are in README.md.

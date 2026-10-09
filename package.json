@@ -1,0 +1,9 @@
+{
+  "name": "fanvue-utm-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Netlify UTM tracking dashboard powered by the existing Fanvue article Google Sheet",
+  "scripts": { "test": "node --test tests/*.test.mjs" },
+  "engines": { "node": ">=18" }
+}
