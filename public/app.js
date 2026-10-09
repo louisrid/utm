@@ -9,7 +9,7 @@
     'statClicks', 'statPosted', 'statSpend', 'statCpc',
     'overviewCount', 'topPublishers', 'sourceLink', 'refreshButton',
     'searchInput', 'articleFilter', 'resultCount', 'publisherTable',
-    'tableLastUpdated', 'toast'
+    'tableLastUpdated', 'mobilePlacements', 'toast'
   ].map(id => [id, $(id)]));
 
   let placements = [];
@@ -53,23 +53,12 @@
     toastTimer = setTimeout(() => els.toast.classList.remove('show'), 2700);
   };
 
-  function selectTheme(theme) {
-    const selected = ['mono', 'blue', 'red'].includes(theme) ? theme : 'mono';
-    document.body.dataset.theme = selected;
-    document.querySelectorAll('[data-theme-choice]').forEach(button => {
-      const active = button.dataset.themeChoice === selected;
-      button.classList.toggle('selected', active);
-      button.setAttribute('aria-pressed', String(active));
-    });
-    try { localStorage.setItem('automatic-x-theme', selected); } catch (_) {}
-  }
-
   function selectView(view) {
     activeView = view === 'placements' ? 'placements' : 'dashboard';
     const placementsView = activeView === 'placements';
     els.overviewView.hidden = placementsView;
     els.placementsView.hidden = !placementsView;
-    els.pageTitle.textContent = placementsView ? 'PLACEMENTS' : 'DASHBOARD';
+    els.pageTitle.textContent = placementsView ? 'Placements' : 'Overview';
     els.viewDashboard.classList.toggle('selected', !placementsView);
     els.viewPlacements.classList.toggle('selected', placementsView);
     els.viewDashboard.setAttribute('aria-selected', String(!placementsView));
@@ -99,7 +88,7 @@
   function showLogin(message) {
     els.dashboard.hidden = true;
     els.loginPanel.hidden = false;
-    setStatus('LOG IN', false);
+    setStatus('PRIVATE', false);
     els.loginError.textContent = message || '';
   }
 
@@ -210,6 +199,8 @@
     if (!filtered.length) {
       els.publisherTable.innerHTML =
         '<tr><td colspan="8" class="empty">No matching placements.</td></tr>';
+      els.mobilePlacements.innerHTML =
+        '<p class="mobile-empty">No matching placements.</p>';
       return;
     }
 
@@ -235,20 +226,41 @@
         '>COPY</button></td>' +
         '<td data-label="POST">' + postCell + '</td></tr>';
     }).join('');
+
+    els.mobilePlacements.innerHTML = filtered.map(p => {
+      const state = p.posted ? ['posted', 'PUBLISHED'] :
+        p.paid ? ['paid', 'PAID'] : ['planned', 'PLANNED'];
+      const link = safeUrl(p.trackingUrl);
+      const post = safeUrl(p.postUrl);
+      const postControl = post === '#'
+        ? '<span class="post-link" aria-disabled="true">NOT POSTED</span>'
+        : '<a class="post-link" href="' + escapeHtml(post) +
+            '" rel="noopener noreferrer" target="_blank">VIEW POST ↗</a>';
+      return '<article class="placement-card">' +
+        '<div class="placement-card-head"><div>' +
+        '<div class="placement-name">' + escapeHtml(p.publisher) + '</div>' +
+        '<div class="placement-code">' + escapeHtml(p.code) + '</div>' +
+        '<div class="placement-owner">' + escapeHtml(p.owner) + '</div>' +
+        '</div><span class="chip ' + state[0] + '">' + state[1] + '</span></div>' +
+        '<div class="placement-kpis">' +
+        '<div class="placement-kpi"><span class="placement-kpi-label">COST</span>' +
+        '<span class="placement-kpi-value">' + dollars(p.cost) + '</span></div>' +
+        '<div class="placement-kpi"><span class="placement-kpi-label">CLICKS</span>' +
+        '<span class="placement-kpi-value">' + fmt(p.clicks) + '</span></div>' +
+        '</div><div class="placement-actions">' +
+        '<button type="button" class="copy-btn" data-url="' + escapeHtml(link) +
+        '" ' + (link === '#' ? 'disabled' : '') + '>COPY UTM</button>' +
+        postControl + '</div></article>';
+    }).join('');
   }
 
-  document.querySelectorAll('[data-theme-choice]').forEach(button => {
-    button.addEventListener('click', () =>
-      selectTheme(button.dataset.themeChoice)
-    );
-  });
   document.querySelectorAll('[data-owner]').forEach(button => {
     button.addEventListener('click', () => selectOwner(button.dataset.owner));
   });
   els.viewDashboard.addEventListener('click', () => selectView('dashboard'));
   els.viewPlacements.addEventListener('click', () => selectView('placements'));
 
-  els.publisherTable.addEventListener('click', async event => {
+  async function handleCopyClick(event) {
     const button = event.target.closest('button[data-url]');
     if (!button) return;
     try {
@@ -257,7 +269,9 @@
     } catch (_) {
       toast('Copy the UTM link from Google Sheets');
     }
-  });
+  }
+  els.publisherTable.addEventListener('click', handleCopyClick);
+  els.mobilePlacements.addEventListener('click', handleCopyClick);
   els.loginForm.addEventListener('submit', event => {
     event.preventDefault();
     key = els.password.value;
@@ -268,10 +282,6 @@
   els.searchInput.addEventListener('input', renderTable);
   els.articleFilter.addEventListener('change', renderTable);
 
-  let initialTheme = 'mono';
-  try { initialTheme = localStorage.getItem('automatic-x-theme') || 'mono'; }
-  catch (_) {}
-  selectTheme(initialTheme);
   selectView('dashboard');
   selectOwner('ALL');
   if (key) load();
