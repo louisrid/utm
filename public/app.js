@@ -224,16 +224,16 @@
           '" rel="noopener noreferrer" target="_blank">VIEW ↗</a>';
 
       return '<tr>' +
-        '<td>' + escapeHtml(p.code) + '</td>' +
-        '<td><span class="publisher-name">' + escapeHtml(p.publisher) + '</span></td>' +
-        '<td><span class="owner-tag">' + escapeHtml(p.owner) + '</span></td>' +
-        '<td><span class="chip ' + state[0] + '">' + state[1] + '</span></td>' +
-        '<td class="num">' + dollars(p.cost) + '</td>' +
-        '<td class="num">' + fmt(p.clicks) + '</td>' +
-        '<td><button type="button" class="copy-btn" data-url="' +
+        '<td data-label="ID">' + escapeHtml(p.code) + '</td>' +
+        '<td data-label="PUBLISHER"><span class="publisher-name">' + escapeHtml(p.publisher) + '</span></td>' +
+        '<td data-label="OWNER"><span class="owner-tag">' + escapeHtml(p.owner) + '</span></td>' +
+        '<td data-label="STATUS"><span class="chip ' + state[0] + '">' + state[1] + '</span></td>' +
+        '<td data-label="COST" class="num">' + dollars(p.cost) + '</td>' +
+        '<td data-label="CLICKS" class="num">' + fmt(p.clicks) + '</td>' +
+        '<td data-label="UTM LINK"><button type="button" class="copy-btn" data-url="' +
         escapeHtml(link) + '" ' + (link === '#' ? 'disabled' : '') +
         '>COPY</button></td>' +
-        '<td>' + postCell + '</td></tr>';
+        '<td data-label="POST">' + postCell + '</td></tr>';
     }).join('');
   }
 
