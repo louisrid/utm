@@ -205,6 +205,9 @@
     }
 
     els.publisherTable.innerHTML = filtered.map(p => {
+      const owner = String(p.owner || '').trim().toUpperCase();
+      const ownerClass = owner === 'LOUIS' ? ' owner-louis' :
+        owner === 'CONNOR' ? ' owner-connor' : '';
       const state = p.posted ? ['posted', 'PUBLISHED'] :
         p.paid ? ['paid', 'PAID'] : ['planned', 'PLANNED'];
       const link = safeUrl(p.trackingUrl);
@@ -217,7 +220,7 @@
       return '<tr>' +
         '<td data-label="ID">' + escapeHtml(p.code) + '</td>' +
         '<td data-label="PUBLISHER"><span class="publisher-name">' + escapeHtml(p.publisher) + '</span></td>' +
-        '<td data-label="OWNER"><span class="owner-tag">' + escapeHtml(p.owner) + '</span></td>' +
+        '<td data-label="OWNER"><span class="owner-tag' + ownerClass + '">' + escapeHtml(p.owner) + '</span></td>' +
         '<td data-label="STATUS"><span class="chip ' + state[0] + '">' + state[1] + '</span></td>' +
         '<td data-label="COST" class="num">' + dollars(p.cost) + '</td>' +
         '<td data-label="CLICKS" class="num">' + fmt(p.clicks) + '</td>' +
@@ -228,6 +231,9 @@
     }).join('');
 
     els.mobilePlacements.innerHTML = filtered.map(p => {
+      const owner = String(p.owner || '').trim().toUpperCase();
+      const ownerClass = owner === 'LOUIS' ? ' owner-louis' :
+        owner === 'CONNOR' ? ' owner-connor' : '';
       const state = p.posted ? ['posted', 'PUBLISHED'] :
         p.paid ? ['paid', 'PAID'] : ['planned', 'PLANNED'];
       const link = safeUrl(p.trackingUrl);
@@ -240,7 +246,7 @@
         '<div class="placement-card-head"><div>' +
         '<div class="placement-name">' + escapeHtml(p.publisher) + '</div>' +
         '<div class="placement-code">' + escapeHtml(p.code) + '</div>' +
-        '<div class="placement-owner">' + escapeHtml(p.owner) + '</div>' +
+        '<div class="placement-owner"><span class="owner-tag' + ownerClass + '">' + escapeHtml(p.owner) + '</span></div>' +
         '</div><span class="chip ' + state[0] + '">' + state[1] + '</span></div>' +
         '<div class="placement-kpis">' +
         '<div class="placement-kpi"><span class="placement-kpi-label">COST</span>' +
